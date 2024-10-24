@@ -74,7 +74,6 @@ const UserRegSchema = new mongoose.Schema({
         required: true,
         trim: true,
         lowercase: true,
-        unique: true, // Ensures no duplicate email addresses
         validate: {
             validator: function(v) {
                 return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v); // Basic email regex validation

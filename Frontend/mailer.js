@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { User } = require('./models/UserReg');        // Named import for User model
+const User = require('./models/UserReg');        // Named import for User model
 const Contact = require('./models/ContactUs'); // Import the Contact model
 const Newsletter = require('./models/newsletter'); // Import Newsletter model
 require('dotenv').config();

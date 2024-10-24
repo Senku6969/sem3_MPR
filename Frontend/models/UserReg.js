@@ -105,4 +105,4 @@ const UserRegSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', UserRegSchema);
 
-module.exports = Registration;
+module.exports = User;

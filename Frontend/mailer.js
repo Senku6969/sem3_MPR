@@ -7,13 +7,14 @@ const User = require('./models/UserReg');        // Named import for User model
 const Contact = require('./models/ContactUs'); // Import the Contact model
 const Newsletter = require('./models/newsletter'); // Import Newsletter model
 require('dotenv').config();
+const uri = 'mongodb://localhost:27017/user_management';
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000, // Increase to 30 seconds

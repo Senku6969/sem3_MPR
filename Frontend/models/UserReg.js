@@ -103,6 +103,4 @@ const UserRegSchema = new mongoose.Schema({
     }
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
 
-const User = mongoose.model('User', UserRegSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', UserRegSchema);

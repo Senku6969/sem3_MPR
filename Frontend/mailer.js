@@ -68,6 +68,7 @@ app.post('/register', async (req, res) => {
 
         // Save the new user to the database
         await newUser.save();
+        console.log('User saved:', newUser);
 
         // Set up nodemailer to send confirmation email
         const transporter = nodemailer.createTransport({

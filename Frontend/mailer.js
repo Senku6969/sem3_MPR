@@ -15,10 +15,12 @@ app.use(bodyParser.json());
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // Increase to 30 seconds
+    socketTimeoutMS: 45000, // Increase socket timeout to 45 seconds
 })
 .then(() => console.log('MongoDB connected'))
-.catch(err => console.error(err));
+.catch(err => console.error('MongoDB connection error:', err));
 
 /* ------------------- User Registration Route ------------------- */
 app.post('/register', async (req, res) => {

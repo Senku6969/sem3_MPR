@@ -9,7 +9,7 @@ const UserRegSchema = new mongoose.Schema({
             'VW Golf 6',
             'Toyota Camry',
             'BMW 320 ModernLine',
-            'Mercedes-Benz GLC',
+            'Mercedes-Benz GLK',
             'VW Passat CC'
         ],
     },

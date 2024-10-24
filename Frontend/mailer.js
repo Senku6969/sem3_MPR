@@ -8,6 +8,8 @@ const Contact = require('./models/ContactUs'); // Import the Contact model
 const Newsletter = require('./models/newsletter'); // Import Newsletter model
 require('dotenv').config();
 const uri = 'mongodb://localhost:27017/user_management';
+const EMAIL = 'mprtest532@gmail.com';
+const EMAIL_PASSWORD = 'JaneDoe2002';
 
 const app = express();
 app.use(cors());
@@ -71,13 +73,13 @@ app.post('/register', async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.EMAIL,
-                pass: process.env.EMAIL_PASSWORD
+                user: EMAIL,
+                pass: EMAIL_PASSWORD
             }
         });
 
         const mailOptions = {
-            from: process.env.EMAIL,
+            from: EMAIL,
             to: email,
             subject: 'Registration Successful',
             text: `Hello ${firstName} ${lastName},\n\nThank you for registering! We have successfully booked a ${carType} for you.`

@@ -61,6 +61,10 @@ app.post('/register', async (req, res) => {
             zipCode
         });
 
+        // Log the incoming request body
+        console.log(req.body);
+
+        // Save the new user to the database
         await newUser.save();
 
         // Set up nodemailer to send confirmation email
@@ -79,10 +83,14 @@ app.post('/register', async (req, res) => {
             text: `Hello ${firstName} ${lastName},\n\nThank you for registering! We have successfully booked a ${carType} for you.`
         };
 
+        // Send the confirmation email
         await transporter.sendMail(mailOptions);
+
+        // Respond with success
         res.status(200).send('Registration successful and email sent!');
     } catch (error) {
-        console.error(error);
+        // Handle errors during user save or email sending
+        console.error('Error during registration:', error);
         res.status(500).send('Error during registration.');
     }
 });

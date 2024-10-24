@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const User = require('./Models/UserReg');
+const { User } = require('./models/UserReg');        // Named import for User model
+const Contact = require('./models/ContactUs'); // Import the Contact model
+const Newsletter = require('./models/newsletter'); // Import Newsletter model
 require('dotenv').config();
 
 const app = express();
@@ -18,18 +20,49 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error(err));
 
-// Registration endpoint
+/* ------------------- User Registration Route ------------------- */
 app.post('/register', async (req, res) => {
-    const { email, fullName } = req.body;
+    const {
+        carType,
+        pickUpVenue,
+        dropOffVenue,
+        pickUpDate,
+        pickUpTime,
+        dropOffDate,
+        dropOffTime,
+        firstName,
+        lastName,
+        phoneNumber,
+        email,
+        address,
+        city,
+        zipCode
+    } = req.body;  // Destructure all fields from the request body
 
     try {
-        // Save user to the database
-        const newUser = new User({ email, firstName, lastName });
+        // Save the user in the database
+        const newUser = new User({
+            carType,
+            pickUpVenue,
+            dropOffVenue,
+            pickUpDate,
+            pickUpTime,
+            dropOffDate,
+            dropOffTime,
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+            address,
+            city,
+            zipCode
+        });
+
         await newUser.save();
 
-        // Sending email
+        // Set up nodemailer to send confirmation email
         const transporter = nodemailer.createTransport({
-            service: 'gmail', // Use your email service
+            service: 'gmail',
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.EMAIL_PASSWORD
@@ -40,15 +73,47 @@ app.post('/register', async (req, res) => {
             from: process.env.EMAIL,
             to: email,
             subject: 'Registration Successful',
-            text: `Hello ${fullName},\n\nThank you for registering on our website!`
+            text: `Hello ${firstName} ${lastName},\n\nThank you for registering! We have successfully booked a ${carType} for you.`
         };
 
         await transporter.sendMail(mailOptions);
-        res.status(200).send('Registration successful, email sent!');
+        res.status(200).send('Registration successful and email sent!');
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error during registration');
+        res.status(500).send('Error during registration.');
     }
+});
+
+/* ------------------- Contact Us Route ------------------- */
+app.post('/contact', async (req, res) => {
+  const { fullName, email, message } = req.body;
+
+  try {
+    const newContact = new Contact({ fullName, email, message });
+    await newContact.save();
+    res.status(200).send('Message received and stored successfully!');
+  } catch (error) {
+    console.error('Error storing contact message:', error);
+    res.status(500).send('Failed to submit the message.');
+  }
+});
+
+/* ---------------- Newsletter Subscription Route ---------------- */
+app.post('/newsletter', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const newSubscriber = new Newsletter({ email });
+    await newSubscriber.save();
+    res.status(200).send('Subscribed to newsletter successfully!');
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).send('This email is already subscribed.');
+    } else {
+      console.error('Newsletter subscription error:', error);
+      res.status(500).send('Failed to subscribe.');
+    }
+  }
 });
 
 // Start the server
